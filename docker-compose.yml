@@ -1,0 +1,24 @@
+version: "3.8"
+services:
+  api:
+    build: .
+    container_name: child_ed_api
+    env_file: .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - chroma_data:/app/chroma_db
+    depends_on:
+      - chroma
+
+  chroma:
+    image: ghcr.io/chroma-core/chroma:latest
+    container_name: chroma_db
+    ports:
+      - "8001:8001"
+    volumes:
+      - chroma_data:/data
+
+volumes:
+  chroma_data:
