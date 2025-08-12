@@ -122,14 +122,239 @@ def setup_ui_styles():
             color: #0f172a !important; 
         }
         
-        /* 사이드바 버튼들 */
-        [data-testid="stSidebar"] .stButton > button { 
-            background-color: #f1f5f9 !important; 
-            color: #334155 !important; 
-            border: 1px solid #cbd5e1 !important;
+        /* 사이드바 Primary 버튼 (새 학습지 생성) */
+        [data-testid="stSidebar"] .stButton button[data-testid="baseButton-primary"] { 
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%) !important;
+            border: 2px solid #86efac !important;
+            border-radius: 14px !important;
+            color: #166534 !important;
+            font-weight: 700 !important;
+            padding: 12px 16px !important;
+            width: 100% !important;
+            font-size: 1rem !important;
+            margin-top: 12px !important;
         }
-        [data-testid="stSidebar"] .stButton > button:hover { 
-            background-color: #e2e8f0 !important; 
+        
+        [data-testid="stSidebar"] .stButton button[data-testid="baseButton-primary"]:hover { 
+            background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%) !important;
+            border-color: #4ade80 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 16px rgba(134, 239, 172, 0.3) !important;
+        }
+        
+        /* 사이드바 셀렉트박스 스타일링 */
+        [data-testid="stSidebar"] .stSelectbox > div > div {
+            background-color: #fff7ed !important; /* 연한 오렌지 */
+            border: 2px solid #fed7aa !important; /* 파스텔 오렌지 테두리 */
+            border-radius: 12px !important;
+            color: #9a3412 !important;
+            font-weight: 600 !important;
+        }
+        
+        [data-testid="stSidebar"] .stSelectbox > div > div:focus {
+            border-color: #fb923c !important; /* 포커스시 오렌지 */
+            box-shadow: 0 0 0 2px rgba(251, 146, 60, 0.2) !important;
+        }
+        
+        [data-testid="stSidebar"] .stSelectbox label {
+            color: #334155 !important;
+            font-weight: 700 !important;
+            font-size: 0.95rem !important;
+        }
+        
+        /* 드롭다운 메뉴 스타일링 */
+        [data-testid="stSidebar"] .stSelectbox [data-baseweb="select"] > div {
+            background-color: #fff7ed !important;
+            border: 2px solid #fed7aa !important;
+            border-radius: 12px !important;
+        }
+        
+        /* 선택된 옵션 텍스트 */
+        [data-testid="stSidebar"] .stSelectbox [data-baseweb="select"] [role="option"] {
+            color: #9a3412 !important;
+            font-weight: 600 !important;
+        }
+        
+        /* 호버 효과 */
+        [data-testid="stSidebar"] .stSelectbox > div > div:hover {
+            border-color: #fb923c !important;
+            background-color: #ffedd5 !important;
+        }
+        
+        /* 드롭다운 리스트 스타일링 */
+        [data-testid="stSidebar"] .stSelectbox [data-baseweb="menu"] {
+            background-color: #fff7ed !important;
+            border: 2px solid #fed7aa !important;
+            border-radius: 12px !important;
+            box-shadow: 0 4px 12px rgba(251, 146, 60, 0.15) !important;
+        }
+        
+        [data-testid="stSidebar"] .stSelectbox [data-baseweb="menu"] [role="option"] {
+            background-color: transparent !important;
+            color: #9a3412 !important;
+            font-weight: 600 !important;
+            padding: 8px 12px !important;
+            border-radius: 8px !important;
+            margin: 2px 4px !important;
+        }
+        
+        [data-testid="stSidebar"] .stSelectbox [data-baseweb="menu"] [role="option"]:hover {
+            background-color: #ffedd5 !important;
+            color: #ea580c !important;
+        }
+        
+        [data-testid="stSidebar"] .stSelectbox [data-baseweb="menu"] [aria-selected="true"] {
+            background-color: #fed7aa !important;
+            color: #9a3412 !important;
+            font-weight: 700 !important;
+        }
+        
+        /* 사이드바 텍스트 입력(추가 요청) 라벨 스타일 */
+        [data-testid="stSidebar"] .stTextInput label,
+        [data-testid="stSidebar"] .stTextArea label {
+            color: #334155 !important;
+            font-weight: 700 !important;
+            font-size: 0.95rem !important;
+            margin-bottom: 6px !important;
+        }
+        /* 단일행 인풋과 텍스트영역 모두 동일 룩앤필 */
+        [data-testid="stSidebar"] .stTextInput input,
+        [data-testid="stSidebar"] .stTextArea textarea,
+        [data-testid="stSidebar"] textarea {
+            background-color: #fff7ed !important; /* 연한 오렌지 */
+            border: 2px solid #fed7aa !important;   /* 파스텔 오렌지 테두리 */
+            border-radius: 12px !important;
+            color: #0b1220 !important;
+            font-weight: 600 !important;
+            padding: 10px 12px !important;
+            width: 100% !important;
+            box-shadow: none !important; /* 검정 테두리 제거 */
+            outline: none !important;
+        }
+        [data-testid="stSidebar"] .stTextArea textarea {
+            min-height: 64px !important; /* 기본 두 줄 높이 */
+            line-height: 1.4 !important;
+            resize: none !important; /* 크기 고정 */
+        }
+        [data-testid="stSidebar"] .stTextInput input::placeholder,
+        [data-testid="stSidebar"] .stTextArea textarea::placeholder {
+            color: rgba(154, 52, 18, 0.65) !important;
+        }
+        [data-testid="stSidebar"] .stTextInput input:focus,
+        [data-testid="stSidebar"] .stTextArea textarea:focus {
+            border-color: #fb923c !important; /* 포커스시 오렌지 */
+            box-shadow: 0 0 0 2px rgba(251, 146, 60, 0.2) !important;
+            outline: none !important;
+        }
+        
+        /* 사이드바 학생 정보 카드 */
+        .sidebar-student-card {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            border: 2px solid #4dd0e1;
+            border-radius: 16px;
+            padding: 16px;
+            margin: 0 0 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(77, 208, 225, 0.15);
+        }
+        
+        .student-name {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #006064;
+            margin-bottom: 4px;
+        }
+        
+        .student-grade {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #00838f;
+            opacity: 0.8;
+        }
+        
+        /* 사이드바 섹션 */
+        .sidebar-section {
+            margin: 20px 0 12px 0;
+        }
+        
+        .sidebar-section-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #334155;
+            padding: 12px 0 8px 0;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 12px;
+        }
+        
+        /* 학습 이력 메타 정보 */
+        .history-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: -8px 0 12px 0;
+            padding: 0 4px;
+            font-size: 0.85rem;
+        }
+        
+        .history-meta .history-score {
+            background: linear-gradient(135deg, #fff4db 0%, #fef3c7 100%);
+            color: #92400e;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+        
+        .history-meta .history-date {
+            color: #64748b;
+            font-weight: 500;
+            font-size: 0.8rem;
+        }
+        
+        /* 사이드바 버튼 (이력 항목) 스타일링 */
+        /* 사이드바 이력 버튼: 밝은 배경, 진한 글자, 고정 높이 (강제 덮어쓰기) */
+        [data-testid="stSidebar"] .stButton > button,
+        [data-testid="stSidebar"] button,
+        [data-testid="stSidebar"] [data-baseweb="button"],
+        [data-testid="stSidebar"] [role="button"] {
+            background-color: #f5f7fb !important;
+            background-image: none !important;
+            border: 2px solid #e5e7eb !important;
+            border-radius: 12px !important;
+            color: #0b1220 !important;
+            font-weight: 700 !important;
+            font-size: 0.95rem !important;
+            padding: 10px 14px !important;
+            width: 100% !important;
+            text-align: left !important;
+            margin-bottom: 10px !important;
+            height: 56px !important;
+            line-height: 34px !important; /* 높이 내에서 수직 중앙 느낌 */
+            display: block !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+        }
+
+        [data-testid="stSidebar"] .stButton > button:hover,
+        [data-testid="stSidebar"] button:hover,
+        [data-testid="stSidebar"] [data-baseweb="button"]:hover,
+        [data-testid="stSidebar"] [role="button"]:hover {
+            background-color: #eef2f7 !important;
+            border-color: #cbd5e1 !important;
+            color: #0b1220 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(148, 163, 184, 0.18) !important;
+        }
+
+        [data-testid="stSidebar"] .stButton > button:focus,
+        [data-testid="stSidebar"] button:focus,
+        [data-testid="stSidebar"] [data-baseweb="button"]:focus,
+        [data-testid="stSidebar"] [role="button"]:focus {
+            outline: none !important;
+            border-color: #94a3b8 !important;
+            box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.25) !important;
         }
         .worksheet-title { font-size: 1.22rem; font-weight: 700; margin: 0.2rem 0 0.9rem 0; color: #0f172a; }
         .problem-card {
@@ -230,6 +455,21 @@ def remove_markdown_links(text):
     text = re.sub(r'\[([^\]]+)\]', r'\1', text)
     return text
 
+def load_curriculum_subjects(grade, semester):
+    """특정 학년/학기의 커리큘럼 subjects 로드"""
+    try:
+        with open("resource/curriculum.json", "r", encoding="utf-8") as f:
+            curriculum_data = json.load(f)
+        
+        for item in curriculum_data:
+            if item.get("grade") == grade and item.get("semester") == semester:
+                return item.get("subjects", [])
+        
+        return []
+    except Exception as e:
+        st.error(f"커리큘럼 데이터 로드 실패: {e}")
+        return []
+
 def get_history_for_feedback(history):
     result = []
     for item in history:
@@ -292,6 +532,10 @@ if "show_register" not in st.session_state:
     st.session_state.show_register = False
 if "feedback" not in st.session_state:
     st.session_state.feedback = None
+if "overall_feedback_text" not in st.session_state:
+    st.session_state.overall_feedback_text = None
+if "overall_feedback_needed" not in st.session_state:
+    st.session_state.overall_feedback_needed = False
 
 # 쿼리 파라미터로 동작 제어
 action = st.query_params.get("action", "")
@@ -310,6 +554,8 @@ elif action == "logout":
     st.session_state.child_grade = None
     st.session_state.child_semester = None
     st.session_state.selected_lesson = None
+    st.session_state.overall_feedback_text = None
+    st.session_state.overall_feedback_needed = False
     st.rerun()
 
 # 앱 타이틀 및 버튼 한 줄 배치
@@ -366,6 +612,8 @@ if st.session_state.show_register:
                 st.session_state.child_semester = reg_semester
                 st.session_state.logged_in = True
                 st.session_state.show_register = False
+                st.session_state.overall_feedback_text = None
+                st.session_state.overall_feedback_needed = True
                 st.rerun()
         else:
             st.warning("모든 정보를 입력하세요.")
@@ -389,6 +637,9 @@ if st.session_state.show_login:
                 st.session_state.child_semester = acc["semester"]
                 st.session_state.logged_in = True
                 st.session_state.show_login = False
+                # 종합 피드백은 첫 진입 시 생성하도록 플래그 설정
+                st.session_state.overall_feedback_text = None
+                st.session_state.overall_feedback_needed = True
                 st.rerun()
             else:
                 st.warning("ID 또는 PW가 일치하지 않습니다.")
@@ -410,21 +661,83 @@ else:
     acc = get_account(st.session_state.child_id)
     setup_ui_styles()
     with st.sidebar:
-        st.markdown(f"#### {acc['name']} ({acc['grade']}학년 {acc['semester']}학기)")
-        if st.button("새 학습지 생성", key="create_lesson_btn"):
+        # 🎓 학생 정보 카드
+        st.markdown(f"""
+        <div class='sidebar-student-card'>
+            <div class='student-name'>{acc['name']}</div>
+            <div class='student-grade'>{acc['grade']}학년 {acc['semester']}학기</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # 📚 학습지 생성 옵션 섹션
+        st.markdown("""
+        <div class='sidebar-section'>
+            <div class='sidebar-section-title'>📚 학습지 생성</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # 학년 선택
+        selected_grade = st.selectbox(
+            "학년 선택",
+            options=[1, 2, 3, 4, 5, 6],
+            index=[1, 2, 3, 4, 5, 6].index(int(acc['grade'])),
+            key="grade_select"
+        )
+        
+        # 학기 선택
+        selected_semester = st.selectbox(
+            "학기 선택",
+            options=[1, 2],
+            index=[1, 2].index(int(acc['semester'])),
+            key="semester_select"
+        )
+        
+        # 커리큘럼 선택을 위한 subjects 로드
+        curriculum_subjects = load_curriculum_subjects(selected_grade, selected_semester)
+        
+        if curriculum_subjects:
+            selected_subject = st.selectbox(
+                "단원 선택",
+                options=["전체 (랜덤)"] + curriculum_subjects,
+                index=0,
+                key="subject_select"
+            )
+        else:
+            selected_subject = "전체 (랜덤)"
+            st.warning(f"{selected_grade}학년 {selected_semester}학기 커리큘럼을 찾을 수 없습니다.")
+        
+        # 추가 요청 입력 (100자 제한)
+        # 두 줄 기본 높이를 위해 text_area 사용. 100자 제한은 코드로 보장
+        extra_request_raw = st.text_area(
+            "추가 요청 (선택, 100자 이내)",
+            key="extra_request_input",
+            height=72,
+        )
+        extra_request = (extra_request_raw or "").strip()
+        if len(extra_request) > 100:
+            st.caption(f"입력 {len(extra_request)}자 중 처음 100자만 전송됩니다.")
+            extra_request = extra_request[:100]
+
+        if st.button("🎯 새 학습지 생성", key="create_lesson_btn", type="primary"):
             payload = {
                 "child_id": acc["id"],
                 "name": acc["name"],
-                "grade": int(acc["grade"]),
-                "semester": int(acc["semester"])
+                "grade": selected_grade,
+                "semester": selected_semester,
+                "subject": selected_subject if selected_subject != "전체 (랜덤)" else None,
+                "extra_request": (extra_request or None)
             }
             with st.spinner("AI가 학습지를 만들고 있어요..."):
                 resp = requests.post(urljoin(API_URL, "/init_profile"), json=payload)
                 if resp.status_code == 200:
                     data = resp.json()
+                    # 선택된 단원 정보로 제목 생성
+                    subject_text = f" - {selected_subject}" if selected_subject != "전체 (랜덤)" else ""
+                    extracted_title = (data.get('lesson') or '').split(']')[-1].split('\n')[0].strip() if isinstance(data.get('lesson'), str) else '수학'
+
                     lesson_item = {
                         "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                        "title": f"{acc['grade']}학년 {acc['semester']}학기 { (data.get('lesson') or '').split(']')[-1].split('\n')[0].strip() if isinstance(data.get('lesson'), str) else '수학' }",
+                        "title": f"{selected_grade}학년 {selected_semester}학기 {extracted_title}{subject_text}",
                         "lesson_id": data["lesson_id"],
                         "content": data["lesson"],
                         "materials_text": data["materials_text"],
@@ -433,12 +746,19 @@ else:
                     add_history(acc["id"], lesson_item["lesson_id"], lesson_item["date"], lesson_item["title"], lesson_item["content"], lesson_item["materials_text"])
                     st.session_state.selected_lesson = lesson_item
                     st.session_state.feedback = None
+                    # 학습 세션 중에는 종합 피드백 자동 호출 방지
+                    st.session_state.overall_feedback_needed = False
                     st.success("✅ 학습지가 생성되었습니다! 메인 화면에서 확인하세요.")
                     st.rerun()
                 else:
                     st.error(f"오류 발생: {resp.text}")
-        st.markdown("---")
-        st.markdown(f"### {acc['name']}님의 학습 이력")
+        # 📊 학습 이력 섹션
+        st.markdown("""
+        <div class='sidebar-section'>
+            <div class='sidebar-section-title'>📊 학습 이력</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
         history = get_history(acc["id"])
         if history:
             for idx, item in enumerate(history):
@@ -450,18 +770,19 @@ else:
                     if m:
                         score_text = f"{m.group(1)}점"
                 unit_title = item['title']
-                score_html = f"<span class='history-score'>{score_text}</span>" if score_text else ""
-                date_html = f"<span class='history-date'>{item['date']}</span>"
-                html = (
-                    f"<div class='history-item'>"
-                    f"  <div class='history-title'>{unit_title}</div>"
-                    f"  <div class='history-row'>{score_html}{date_html}</div>"
-                    f"</div>"
-                )
-                if st.button(label=f"이력_{idx}", key=f"lesson_{idx}"):
+
+                # 버튼 내부에 점수 포함, 한 줄 표시 유지
+                truncated_title = unit_title[:28] + ("..." if len(unit_title) > 28 else "")
+                score_inline = f"  · {score_text}" if score_text else "  · 점수 없음"
+
+                # 클릭 가능한 이력 카드 (박스)
+                if st.button(
+                    label=f"📝 {truncated_title}{score_inline}",
+                    key=f"lesson_{idx}",
+                    help=f"{unit_title}\n{item['date']}"
+                ):
                     st.session_state.selected_lesson = item
                     st.rerun()
-                st.markdown(html, unsafe_allow_html=True)
 
     # 메인: 학습 상세/진행
     if st.session_state.selected_lesson:
@@ -607,20 +928,29 @@ else:
         history = get_history(st.session_state.child_id)
         if history:
             st.markdown("## 📊 AI 종합 피드백")
-            with st.spinner("AI가 종합 피드백을 만들고 있어요..."):
-                history_for_feedback = get_history_for_feedback(history)
-                payload = {
-                    "name": acc["name"],
-                    "grade": acc["grade"],
-                    "semester": acc["semester"],
-                    "history": history_for_feedback
-                }
-                resp = requests.post(urljoin(API_URL, "/overall_feedback"), json=payload)
-                if resp.status_code == 200:
-                    overall_feedback = resp.json().get("feedback", "")
-                    st.markdown(overall_feedback, unsafe_allow_html=True)
-                else:
-                    st.error("AI 종합 피드백 생성에 실패했습니다.")
+            # 최초 로그인 시 1회 호출하여 저장, 이후에는 캐시된 텍스트만 사용
+            if (not st.session_state.overall_feedback_text) and (st.session_state.get("overall_feedback_needed", True)):
+                with st.spinner("AI가 종합 피드백을 만들고 있어요..."):
+                    history_for_feedback = get_history_for_feedback(history)
+                    payload = {
+                        "name": acc["name"],
+                        "grade": acc["grade"],
+                        "semester": acc["semester"],
+                        "history": history_for_feedback
+                    }
+                    resp = requests.post(urljoin(API_URL, "/overall_feedback"), json=payload)
+                    if resp.status_code == 200:
+                        st.session_state.overall_feedback_text = resp.json().get("feedback", "")
+                        st.session_state.overall_feedback_needed = False
+                    else:
+                        st.session_state.overall_feedback_text = "종합 피드백 생성에 실패했습니다."
+                        st.session_state.overall_feedback_needed = False
+            # 비어있지 않은 문자열인지 확인 후 렌더
+            ofb = st.session_state.overall_feedback_text
+            if isinstance(ofb, str) and ofb.strip():
+                st.markdown(ofb, unsafe_allow_html=True)
+            else:
+                st.info("종합 피드백을 불러오는 중 문제가 있었습니다. 좌측에서 학습을 시작하면 더 정확한 리포트를 만들 수 있어요.")
         else:
             st.markdown("""
             # 👋 처음 오셨군요!

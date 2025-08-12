@@ -1,4 +1,4 @@
-import openai
+from openai import AzureOpenAI
 from jinja2 import Environment, FileSystemLoader
 import os
 import uuid
@@ -21,11 +21,14 @@ class AzureOpenAIService:
     def __init__(self, endpoint, key, dep_curriculum, dep_embed):
         dotenv_path = os.path.join(os.path.dirname(__file__), '..', '..', '.env')
         load_dotenv(dotenv_path)
-        openai.api_type = "azure"
-        openai.api_base = endpoint
-        openai.api_version = "2024-05-01-preview"
-        openai.api_key = key
-        os.environ["AZURE_OPENAI_API_KEY"] = key
+        
+        # Azure OpenAI 클라이언트 직접 초기화 (환경변수 의존성 제거)
+        self.client = AzureOpenAI(
+            azure_endpoint=endpoint,
+            api_key=key,
+            api_version="2024-05-01-preview"
+        )
+        
         self.dep_curriculum = dep_curriculum
         self.dep_embed = dep_embed
 
@@ -37,7 +40,7 @@ class AzureOpenAIService:
             grade=profile.grade,
             semester=profile.semester
         )
-        resp = openai.chat.completions.create(
+        resp = self.client.chat.completions.create(
             model=self.dep_curriculum,
             messages=[
                 {"role": "system", "content": "초등 수학 교육과정 생성 AI"},
@@ -49,21 +52,14 @@ class AzureOpenAIService:
     def get_embedding(self, text: str) -> list:
         """텍스트를 임베딩 벡터로 변환"""
         try:
-            if openai.api_type == "azure":
-                response = openai.embeddings.create(
-                    input=text,
-                    model=self.dep_embed
-                )
-            else:
-                response = openai.embeddings.create(
-                    input=text,
-                    model="text-embedding-ada-002"
-                )
+            response = self.client.embeddings.create(
+                input=text,
+                model=self.dep_embed
+            )
             embedding = response.data[0].embedding
             return embedding
         except Exception as e:
-            print(f"임베딩 생성 실패 - API Type: {openai.api_type}, Model: {self.dep_embed}")
-            print(f"API Base: {openai.api_base}")
+            print(f"임베딩 생성 실패 - Model: {self.dep_embed}")
             print(f"Error: {e}")
             raise e
 
@@ -72,7 +68,7 @@ class AzureOpenAIService:
         tmpl = env.get_template("materials.txt")
         # 구버전 호환용: curriculum/doc 기반 렌더링은 더 이상 사용하지 않음
         prompt = tmpl.render(grade=0, semester=0, topic="")
-        resp = openai.chat.completions.create(
+        resp = self.client.chat.completions.create(
             model=self.dep_curriculum,
             messages=[
                 {"role": "system", "content": "교재 생성 AI"},
@@ -185,7 +181,7 @@ class AzureOpenAIService:
         banned_terms_expanded = self._expand_terms(banned)
         for attempt in range(max_retry + 1):
             prompt = _build_prompt() if attempt == 0 else (_build_prompt() + "\n\n이전 시도에서 금지 주제가 포함되었습니다. 금지 주제를 절대 사용하지 말고 다시 출제하세요.")
-            resp = openai.chat.completions.create(
+            resp = self.client.chat.completions.create(
                 model=self.dep_curriculum,
                 messages=[
                     {"role": "system", "content": sys_msg},
@@ -226,7 +222,7 @@ class AzureOpenAIService:
         #     name="openai-feedback-call",
         #     input=prompt
         # )
-        resp = openai.chat.completions.create(
+        resp = self.client.chat.completions.create(
             model=self.dep_curriculum,
             messages=[
                 {"role": "system", "content": "피드백 생성 AI"},
@@ -357,7 +353,7 @@ class AzureOpenAIService:
             ]
         }
         try:
-            expl_resp = openai.chat.completions.create(
+            expl_resp = self.client.chat.completions.create(
                 model=self.dep_curriculum,
                 messages=[
                     {"role": "system", "content": expl_system},
@@ -430,7 +426,7 @@ class AzureOpenAIService:
         #     name="openai-overall-feedback-call",
         #     input=prompt
         # )
-        resp = openai.chat.completions.create(
+        resp = self.client.chat.completions.create(
             model=self.dep_curriculum,
             messages=[
                 {"role": "system", "content": "종합 피드백 생성 AI"},
@@ -447,7 +443,7 @@ class AzureOpenAIService:
         tmpl = env.get_template("next_material.txt")
         # next_material 템플릿은 이름/학년/학기/이전 주제/피드백을 기대
         prompt = tmpl.render(name=child_id, grade=0, semester=0, topic="", feedback=str(last_responses or ""))
-        resp = openai.chat.completions.create(
+        resp = self.client.chat.completions.create(
             model=self.dep_curriculum,
             messages=[
                 {"role": "system", "content": "다음 교재 생성 AI"},
@@ -456,7 +452,7 @@ class AzureOpenAIService:
         )
         return resp.choices[0].message.content.strip()
     
-    def generate_materials_for_grade_semester_with_rag(self, grade: int, semester: int, related_docs, curriculum_units=None, curriculum_guide=""):
+    def generate_materials_for_grade_semester_with_rag(self, grade: int, semester: int, related_docs, curriculum_units=None, curriculum_guide="", specified_subject=None, extra_request=None):
         """RAG 시스템을 활용한 고품질 문제 생성"""
         from typing import List
         import random
@@ -465,8 +461,11 @@ class AzureOpenAIService:
         if not curriculum_units:
             return self.generate_materials_for_grade_semester(grade, semester, related_docs)
         
-        # 단원 중 하나를 선택 (추후 개선 가능)
-        selected_unit = random.choice(curriculum_units)
+        # 지정된 단원이 있으면 우선 사용, 없으면 랜덤 선택
+        if specified_subject and specified_subject in curriculum_units:
+            selected_unit = specified_subject
+        else:
+            selected_unit = random.choice(curriculum_units)
         
         # 교육과정 가이드 정보를 포함한 시스템 메시지 구성
         enhanced_system_message = f"""당신은 초등학교 수학 문제 출제 전문가입니다.
@@ -483,6 +482,7 @@ class AzureOpenAIService:
 3. 문제 난이도를 단계별로 구성 (기본→추론→응용→고급응용)
 4. 모든 문제는 4지선다 형태 (A, B, C, D)
 5. 명확하고 모호하지 않은 문제 구성
+6. (있다면) 사용자의 추가 요청을 최대 100자 범위 내에서 반영
 """
         
         # 기존 템플릿 활용하되 단원 정보 추가
@@ -497,8 +497,10 @@ class AzureOpenAIService:
         # 교육과정 가이드 정보가 있으면 프롬프트에 추가
         if curriculum_guide:
             prompt += f"\n\n[교육과정 가이드 참고]\n{curriculum_guide[:1000]}"  # 길이 제한
+        if extra_request:
+            prompt += f"\n\n[추가 요청]\n{str(extra_request)[:100]}"
         
-        resp = openai.chat.completions.create(
+        resp = self.client.chat.completions.create(
             model=self.dep_curriculum,
             messages=[
                 {"role": "system", "content": enhanced_system_message},

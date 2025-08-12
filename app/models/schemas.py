@@ -7,6 +7,12 @@ class ChildProfileInput(BaseModel):
     name: str     = Field(..., description="아동 이름")
     grade: int    = Field(..., description="학년")
     semester: int = Field(..., description="학기")
+    subject: Optional[str] = Field(None, description="선택된 단원 (옵션)")
+    extra_request: Optional[str] = Field(
+        None,
+        max_length=100,
+        description="문제 생성 시 고려할 추가 요청(100자 이내)"
+    )
 
 class LearningResponse(BaseModel):
     lesson: str             = Field(..., description="생성된 교재 내용")

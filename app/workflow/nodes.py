@@ -10,14 +10,15 @@ from app.services.vector_db_service import VectorDBService
 from app.services.rag_service import RAGService
 from app.models.schemas import EducationWorkflowState, LearningResponse, FeedbackResponse, OverallFeedbackResponse
 
-key = os.getenv("AZURE_OPENAI_API_KEY")
+key = os.getenv("AOAI_API_KEY")
+endpoint = os.getenv("AOAI_ENDPOINT")
 if not key:
-    raise RuntimeError("환경변수 AZURE_OPENAI_API_KEY가 설정되어 있지 않습니다.")
+    raise RuntimeError("환경변수 AOAI_API_KEY가 설정되어 있지 않습니다.")
 azure_service = AzureOpenAIService(
-    endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
+    endpoint=os.getenv("AOAI_ENDPOINT"),
     key=key,
-    dep_curriculum=os.getenv("AZURE_OPENAI_DEPLOY_CURRICULUM"),
-    dep_embed=os.getenv("AZURE_OPENAI_DEPLOY_EMBED"),
+    dep_curriculum=os.getenv("AOAI_DEPLOY_GPT4O"),
+    dep_embed=os.getenv("AOAI_DEPLOY_EMBED_3_LARGE"),
 )
 vector_service = VectorDBService(persist_directory=os.getenv("CHROMA_DB_PATH", "./chroma_db"))
 rag_service = RAGService(vector_service, azure_service)
@@ -72,7 +73,9 @@ def generate_materials_node(state: EducationWorkflowState) -> EducationWorkflowS
             state.child_profile.semester,
             related_docs,
             curriculum_units,
-            curriculum_guide
+            curriculum_guide,
+            specified_subject=getattr(state.child_profile, 'subject', None),
+            extra_request=getattr(state.child_profile, 'extra_request', None)
         )
         lesson_id = azure_service.save_lesson(state.child_profile.child_id, lesson, related_docs)
 

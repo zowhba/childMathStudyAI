@@ -14,3 +14,5 @@ for collection in collections:
     print(f"\n--- Collection: {collection.name} ---")
     docs = collection.get()
     print(docs)
+
+

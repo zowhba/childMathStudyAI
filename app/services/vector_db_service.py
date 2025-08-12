@@ -7,7 +7,7 @@ class VectorDBService:
     def __init__(self, persist_directory):
         self.client = PersistentClient(path=persist_directory)
         self.collection = self.client.get_or_create_collection(name="learning")
-        # self.dep_curriculum = os.getenv("AZURE_OPENAI_DEPLOY_CURRICULUM")  # Uncomment if needed
+        # self.dep_curriculum = os.getenv("AOAI_DEPLOY_GPT4O")  # Uncomment if needed
 
     def add_assessment(self, student_id: str, lesson_id: str, responses: list, materials_text: str, azure_service):
         print(f"add_assessment called: student_id={student_id}, lesson_id={lesson_id}, responses={responses}")

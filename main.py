@@ -17,10 +17,10 @@ app = FastAPI(title="어린이 맞춤형 교재 생성기 API")
 # 서비스 초기화
 vector_service = VectorDBService(persist_directory=os.getenv("CHROMA_DB_PATH", "./chroma_db"))
 azure_service = AzureOpenAIService(
-    endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
-    key=os.getenv("AZURE_OPENAI_API_KEY"),
-    dep_curriculum=os.getenv("AZURE_OPENAI_DEPLOY_CURRICULUM"),
-    dep_embed=os.getenv("AZURE_OPENAI_DEPLOY_EMBED")
+    endpoint=os.getenv("AOAI_ENDPOINT"),
+    key=os.getenv("AOAI_API_KEY"),
+    dep_curriculum=os.getenv("AOAI_DEPLOY_GPT4O"),
+    dep_embed=os.getenv("AOAI_DEPLOY_EMBED_3_LARGE")
 )
 rag_service = RAGService(vector_service, azure_service)
 

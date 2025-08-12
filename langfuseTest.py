@@ -1,4 +1,4 @@
-import openai
+from openai import AzureOpenAI
 from jinja2 import Environment, FileSystemLoader
 import os
 import uuid
@@ -20,11 +20,14 @@ class  langfuseTest:
     def __init__(self, endpoint, key, dep_curriculum, dep_embed):
         dotenv_path = os.path.join(os.path.dirname(__file__), '..', '..', '.env')
         load_dotenv(dotenv_path)
-        openai.api_type = "azure"
-        openai.api_base = endpoint
-        openai.api_version = "2024-05-01-preview"
-        openai.api_key = key
-        os.environ["AZURE_OPENAI_API_KEY"] = key
+        
+        # Azure OpenAI 클라이언트 직접 초기화
+        self.client = AzureOpenAI(
+            azure_endpoint=endpoint,
+            api_key=key,
+            api_version="2024-05-01-preview"
+        )
+        
         self.dep_curriculum = dep_curriculum
         self.dep_embed = dep_embed
 
@@ -41,7 +44,7 @@ class  langfuseTest:
             name="openai-newsTopicTest-call",
             input=prompt
         )
-        resp = openai.chat.completions.create(
+        resp = self.client.chat.completions.create(
             model=self.dep_curriculum,
             messages=[
                 {"role": "system", "content": "피드백 생성 AI"},
